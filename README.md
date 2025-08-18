@@ -12,7 +12,7 @@ Based: [https://github.com/gagebenne/pydexcom](https://github.com/gagebenne/pyde
 - **Zod** runtime response validation
 - **Exponential backoff retries** (jitter, `Retry-After`)
 - **Session ID caching** with TTL (pluggable store)
-- Strict **TS types**, ESLint (typed rules), Node 18+ built-in `fetch`
+- Strict **TS types**, ESLint (typed rules), Node 22+ built-in `fetch`
 - Tests: **node\:test** + **c8** (coverage), build via **tsup**
 
 > **[Disclaimer](#important-notice--disclaimer)**: This is an unofficial library. It is not a medical device and must not be used for medical decisions.
@@ -273,7 +273,7 @@ try {
 
 ## Compatibility
 
-- **Node 18+** (global `fetch`).
+- **Node 22+** (global `fetch`).
 - **Server-side** usage recommended. Browser/Edge likely blocked by CORS and Share policy.
 - **ESM/CJS** dual exports; `sideEffects: false` for tree-shaking.
 
@@ -384,7 +384,7 @@ try {
 
 ### Important Notice & Disclaimer
 
-Unofficial project. This library is not affiliated with, endorsed by, or authorized by Dexcom, Inc. Dexcom, Dexcom Share, and related marks are trademarks of Dexcom, Inc. Any use of the Dexcom service is subject to Dexcom’s terms and policies.
+Unofficial project. This library is not affiliated with, endorsed by, or authorized by [Dexcom](https://www.dexcom.com/), Inc. Dexcom, Dexcom Share, and related marks are trademarks of Dexcom, Inc. Any use of the Dexcom service is subject to Dexcom’s terms and policies.
 
 Not medical advice / not a medical device. This software is provided for educational and informational purposes only. It is not intended for diagnosis, treatment, or any medical decision-making. Do not rely on this library for real-time monitoring or safety-critical scenarios. Always consult a qualified healthcare professional.
 
