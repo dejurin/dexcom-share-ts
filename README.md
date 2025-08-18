@@ -27,7 +27,7 @@ Based: [https://github.com/gagebenne/pydexcom](https://github.com/gagebenne/pyde
 npm i dexcom-share-ts
 ```
 
-Requires **Node 18+** (has global `fetch`).
+Requires **Node 22+** (has global `fetch`).
 
 ---
 
