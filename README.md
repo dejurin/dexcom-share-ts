@@ -15,7 +15,7 @@ Based: [https://github.com/gagebenne/pydexcom](https://github.com/gagebenne/pyde
 - Strict **TS types**, ESLint (typed rules), Node 18+ built-in `fetch`
 - Tests: **node\:test** + **c8** (coverage), build via **tsup**
 
-> **Disclaimer**: This is an unofficial library of Dexcom™. It is not a medical device and must not be used for medical decisions.
+> **[Disclaimer](#important-notice--disclaimer)**: This is an unofficial library. It is not a medical device and must not be used for medical decisions.
 
 ![Dexcom Share TS demo](.github/dexcom-share-ts.gif)
 
