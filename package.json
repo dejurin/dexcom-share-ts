@@ -1,0 +1,83 @@
+{
+  "name": "dexcom-share-ts",
+  "version": "0.0.1",
+  "description": "A lightweight TypeScript API client for the Dexcom Share service—modern DX and runtime safety included.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dejurin/dexcom-share-ts.git"
+  },
+  "homepage": "https://github.com/dejurin/dexcom-share-ts#readme",
+  "bugs": {
+    "url": "https://github.com/dejurin/dexcom-share-ts/issues"
+  },
+  "keywords": [
+    "dexcom",
+    "dexcom-share",
+    "cgm",
+    "glucose",
+    "diabetes",
+    "g6",
+    "g7",
+    "pydexcom",
+    "api",
+    "client",
+    "typescript",
+    "node",
+    "esm",
+    "cjs",
+    "zod",
+    "retry",
+    "backoff"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --target node18 --treeshake",
+    "test": "npm run build && c8 --reporter=text --reporter=lcov node --test \"test/**/*.spec.mjs\"",
+    "test:ci": "npm run build && c8 --check-coverage --branches 80 --functions 85 --lines 98 --statements 98 --reporter=text --reporter=lcov node --test \"test/**/*.spec.mjs\"",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm run test:ci && npm run fmt:check"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "zod": "^4.0.17"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "c8": "^10.1.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.5",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  }
+}
