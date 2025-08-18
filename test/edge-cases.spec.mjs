@@ -346,7 +346,7 @@ it("fetchWithRetry: exhausted network retries -> throws last error", async () =>
   await assert.rejects(() => dex.getCurrentGlucoseReading(), /network down/i);
 });
 
-it("toQuery encodes primitives and objects (via private post path)", async () => {
+it("toQuery encodes primitives, arrays and objects (via private post path)", async () => {
   let capturedUrl = "";
   setGlobalFetch((url) => {
     capturedUrl = reqToString(url);
@@ -358,13 +358,14 @@ it("toQuery encodes primitives and objects (via private post path)", async () =>
   // Access private `post` at runtime (TS private is erased in JS)
   await assert.rejects(() =>
     dex["post"]("General/AuthenticatePublisherAccount", {
-      params: { a: 1, b: true, e: { x: 1 } },
+      params: { a: 1, b: true, c: [1, 2, "x"], e: { x: 1 } },
       json: {},
     }),
   );
 
   assert.ok(capturedUrl.includes("a=1"));
   assert.ok(capturedUrl.includes("b=true"));
+  assert.ok(capturedUrl.includes("c=%5B1%2C2%2C%22x%22%5D"));
   // object gets JSON-encoded and URL-escaped
   assert.ok(capturedUrl.includes("e=%7B%22x%22%3A1%7D"));
 });

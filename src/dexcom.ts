@@ -188,7 +188,7 @@ export class Dexcom {
       password: this.password,
       applicationId: this.applicationId,
     };
-    const id = (await this.post(DEXCOM_AUTHENTICATE_ENDPOINT, { json }));
+    const id = await this.post(DEXCOM_AUTHENTICATE_ENDPOINT, { json });
     const parsed = zAuthString.parse(id);
     return parsed;
   }
@@ -199,7 +199,7 @@ export class Dexcom {
       password: this.password,
       applicationId: this.applicationId,
     };
-    const id = (await this.post(DEXCOM_LOGIN_ID_ENDPOINT, { json }));
+    const id = await this.post(DEXCOM_LOGIN_ID_ENDPOINT, { json });
     const parsed = zAuthString.parse(id);
     return parsed;
   }
