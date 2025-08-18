@@ -162,7 +162,9 @@ export class Dexcom {
       if (message?.includes("password")) return new ArgumentError(DexcomErrorCode.PASSWORD_INVALID);
       if (message?.includes("UUID")) return new ArgumentError(DexcomErrorCode.ACCOUNT_ID_INVALID);
     }
-    if (code && message) return new ServerError(DexcomErrorCode.SERVER_UNKNOWN_CODE);
+    if (code && message) {
+      return new ServerError(DexcomErrorCode.SERVER_UNKNOWN_CODE);
+    }
     return new ServerError(DexcomErrorCode.SERVER_UNEXPECTED);
   }
 

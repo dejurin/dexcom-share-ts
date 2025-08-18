@@ -106,6 +106,5 @@ export async function fetchWithRetry(
       throw e;
     }
   }
-  // Exhausted
   throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
 }
