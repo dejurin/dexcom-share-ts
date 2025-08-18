@@ -30,19 +30,17 @@ const reqToString = (input) =>
   typeof input === "string"
     ? input
     : input instanceof URL
-    ? input.href
-    : input && typeof input === "object" && "url" in input
-    ? input.url
-    : String(input);
+      ? input.href
+      : input && typeof input === "object" && "url" in input
+        ? input.url
+        : String(input);
 
 const ok = (body, status = 200, headers = {}) =>
   new Response(JSON.stringify(body), { status, headers });
 
-const okRaw = (text, status = 200, headers = {}) =>
-  new Response(text, { status, headers });
+const okRaw = (text, status = 200, headers = {}) => new Response(text, { status, headers });
 
-const err = (code, message, status = 400) =>
-  ok({ Code: code, Message: message }, status);
+const err = (code, message, status = 400) => ok({ Code: code, Message: message }, status);
 
 const setFetch = (fn) => {
   const g = globalThis;
@@ -50,8 +48,7 @@ const setFetch = (fn) => {
   else delete g.fetch;
 };
 
-const mkDex = (overrides = {}) =>
-  new Dexcom({ username: "u", password: "p", ...overrides });
+const mkDex = (overrides = {}) => new Dexcom({ username: "u", password: "p", ...overrides });
 
 // Common happy reading used in many tests
 const reading = [{ DT: "Date(1691455258000-0400)", Value: 85, Trend: "Flat" }];
@@ -87,7 +84,9 @@ describe("Extra coverage", () => {
       if (s.includes(P.READ)) {
         calls += 1;
         if (calls === 1) {
-          return Promise.resolve(new Response("{}", { status: 429, headers: { "retry-after": past } }));
+          return Promise.resolve(
+            new Response("{}", { status: 429, headers: { "retry-after": past } }),
+          );
         }
         return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: 88, Trend: "Flat" }]));
       }
@@ -120,8 +119,8 @@ describe("Extra coverage", () => {
       if (s.includes(P.READ)) {
         return Promise.resolve(
           ok([
-            { DT: "Date(1691455258000-0400)", Value: 86, Trend: "DoubleUp" },     // ↑↑
-            { DT: "Date(1691455258000-0400)", Value: 95, Trend: "FortyFiveDown" },// ↘
+            { DT: "Date(1691455258000-0400)", Value: 86, Trend: "DoubleUp" }, // ↑↑
+            { DT: "Date(1691455258000-0400)", Value: 95, Trend: "FortyFiveDown" }, // ↘
             { DT: "Date(1691455258000-0400)", Value: 100, Trend: "RateOutOfRange" }, // -
           ]),
         );
@@ -158,7 +157,7 @@ describe("Extra coverage", () => {
     assert.match(capturedUrl, /a=1/);
     assert.match(capturedUrl, /b=true/);
     assert.ok(capturedUrl.includes("f=%5B1%2C2%2C%22x%22%5D")); // array JSON-encoded
-    assert.ok(capturedUrl.includes("e=%7B%22x%22%3A1%7D"));     // object JSON-encoded
+    assert.ok(capturedUrl.includes("e=%7B%22x%22%3A1%7D")); // object JSON-encoded
 
     // direct toQuery export, too (keeps util.ts covered if exported)
     if (typeof toQuery === "function") {
@@ -246,7 +245,8 @@ describe("Error mapping", () => {
   it('maps SSO_InternalError("Cannot Authenticate by AccountId") to AccountError', async () => {
     setFetch((url) => {
       const s = reqToString(url);
-      if (s.includes(P.AUTH)) return Promise.resolve(err("SSO_InternalError", "Cannot Authenticate by AccountId", 400));
+      if (s.includes(P.AUTH))
+        return Promise.resolve(err("SSO_InternalError", "Cannot Authenticate by AccountId", 400));
       return Promise.resolve(new Response("{}", { status: 404 }));
     });
     await assert.rejects(() => mkDex().getCurrentGlucoseReading(), /Failed to authenticate/i);
@@ -255,14 +255,22 @@ describe("Error mapping", () => {
   it("maps SSO_AuthenticateMaxAttemptsExceeded to AccountError (max attempts)", async () => {
     setFetch((url) => {
       const s = reqToString(url);
-      if (s.includes(P.AUTH)) return Promise.resolve(err("SSO_AuthenticateMaxAttemptsExceeded", "Too many", 400));
+      if (s.includes(P.AUTH))
+        return Promise.resolve(err("SSO_AuthenticateMaxAttemptsExceeded", "Too many", 400));
       return Promise.resolve(new Response("{}", { status: 404 }));
     });
-    await assert.rejects(() => mkDex().getCurrentGlucoseReading(), /Maximum authentication attempts exceeded/i);
+    await assert.rejects(
+      () => mkDex().getCurrentGlucoseReading(),
+      /Maximum authentication attempts exceeded/i,
+    );
   });
 
   it("AccountPasswordInvalid -> AccountError", async () => {
-    setFetch((url) => (reqToString(url).includes(P.AUTH) ? Promise.resolve(err("AccountPasswordInvalid", "bad", 401)) : Promise.resolve(new Response("{}", { status: 404 }))));
+    setFetch((url) =>
+      reqToString(url).includes(P.AUTH)
+        ? Promise.resolve(err("AccountPasswordInvalid", "bad", 401))
+        : Promise.resolve(new Response("{}", { status: 404 })),
+    );
     await assert.rejects(() => mkDex().getCurrentGlucoseReading(), /Failed to authenticate/i);
   });
 
@@ -278,7 +286,11 @@ describe("Error mapping", () => {
   });
 
   it("unknown code+message -> SERVER_UNKNOWN_CODE; unexpected shape -> SERVER_UNEXPECTED", async () => {
-    setFetch((url) => (reqToString(url).includes(P.AUTH) ? Promise.resolve(err("SomeNewCode", "new", 400)) : Promise.resolve(new Response("{}", { status: 404 }))));
+    setFetch((url) =>
+      reqToString(url).includes(P.AUTH)
+        ? Promise.resolve(err("SomeNewCode", "new", 400))
+        : Promise.resolve(new Response("{}", { status: 404 })),
+    );
     await assert.rejects(() => mkDex().getLatestGlucoseReading(), /Unknown error code/i);
 
     setFetch(() => Promise.resolve(ok({ not: "expected" }, 400)));
@@ -310,7 +322,9 @@ describe("fetchWithRetry", () => {
       if (s.includes(P.READ)) {
         attempts += 1;
         if (attempts === 1)
-          return Promise.resolve(new Response("{}", { status: 429, headers: { "retry-after": "0" } }));
+          return Promise.resolve(
+            new Response("{}", { status: 429, headers: { "retry-after": "0" } }),
+          );
         return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: 101, Trend: "Flat" }]));
       }
       return Promise.resolve(new Response("{}", { status: 404 }));
@@ -362,7 +376,9 @@ describe("fetchWithRetry", () => {
       if (s.includes(P.READ)) {
         calls += 1;
         if (calls === 1)
-          return Promise.resolve(new Response("{}", { status: 429, headers: { "retry-after": "foo" } }));
+          return Promise.resolve(
+            new Response("{}", { status: 429, headers: { "retry-after": "foo" } }),
+          );
         return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: 104, Trend: "Flat" }]));
       }
       return Promise.resolve(new Response("{}", { status: 404 }));
@@ -384,7 +400,9 @@ describe("fetchWithRetry", () => {
       if (s.includes(P.READ)) {
         calls += 1;
         if (calls === 1)
-          return Promise.resolve(new Response("{}", { status: 429, headers: { "retry-after": future } }));
+          return Promise.resolve(
+            new Response("{}", { status: 429, headers: { "retry-after": future } }),
+          );
         return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: 106, Trend: "Flat" }]));
       }
       return Promise.resolve(new Response("{}", { status: 404 }));
@@ -420,7 +438,10 @@ describe("Local validation & constructors", () => {
       return Promise.resolve(new Response("{}", { status: 500 }));
     });
     const dex = mkDex({ password: "" });
-    await assert.rejects(() => dex.getCurrentGlucoseReading(), /Password must be non-empty string/i);
+    await assert.rejects(
+      () => dex.getCurrentGlucoseReading(),
+      /Password must be non-empty string/i,
+    );
     assert.equal(called, false);
   });
 
@@ -441,13 +462,27 @@ describe("Local validation & constructors", () => {
       called = true;
       return Promise.resolve(new Response("{}", { status: 500 }));
     });
-    assert.throws(() => new Dexcom({ username: "", password: "p" }), /At least one of account_id, username should be provided/i);
+    assert.throws(
+      () => new Dexcom({ username: "", password: "p" }),
+      /At least one of account_id, username should be provided/i,
+    );
     assert.equal(called, false);
   });
 
   it("constructor validation errors: region invalid / both ids / neither id", () => {
-    assert.throws(() => new Dexcom({ username: "u", password: "p", region: "xx" }), /Region must be 'us', 'ous, or 'jp'/i);
-    assert.throws(() => new Dexcom({ username: "u", accountId: "12345678-90ab-cdef-1234-567890abcdef", password: "p" }), /Only one of account_id, username/i);
+    assert.throws(
+      () => new Dexcom({ username: "u", password: "p", region: "xx" }),
+      /Region must be 'us', 'ous, or 'jp'/i,
+    );
+    assert.throws(
+      () =>
+        new Dexcom({
+          username: "u",
+          accountId: "12345678-90ab-cdef-1234-567890abcdef",
+          password: "p",
+        }),
+      /Only one of account_id, username/i,
+    );
     // @ts-ignore construct with only password (JS test)
     assert.throws(() => new Dexcom({ password: "p" }), /At least one of account_id, username/i);
   });
@@ -499,7 +534,9 @@ describe("Session & getters", () => {
       if (s.includes(P.AUTH)) return Promise.resolve(ok("12345678-90ab-cdef-1234-567890abcdef"));
       if (s.includes(P.LOGIN)) {
         loginCalls += 1;
-        return Promise.resolve(ok(`aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeee${String(loginCalls).padStart(2, "0")}`));
+        return Promise.resolve(
+          ok(`aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeee${String(loginCalls).padStart(2, "0")}`),
+        );
       }
       if (s.includes(P.READ)) {
         if (first) {
@@ -525,9 +562,12 @@ describe("Session & getters", () => {
       if (s.includes(P.AUTH)) return Promise.resolve(ok("12345678-90ab-cdef-1234-567890abcdef"));
       if (s.includes(P.LOGIN)) {
         logins += 1;
-        return Promise.resolve(ok(`aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeee${String(logins).padStart(2, "0")}`));
+        return Promise.resolve(
+          ok(`aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeee${String(logins).padStart(2, "0")}`),
+        );
       }
-      if (s.includes(P.READ)) return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: 103, Trend: "Flat" }]));
+      if (s.includes(P.READ))
+        return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: 103, Trend: "Flat" }]));
       return Promise.resolve(new Response("{}", { status: 404 }));
     });
 
@@ -555,7 +595,9 @@ describe("Session & getters", () => {
         return Promise.resolve(ok("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"));
       }
       if (s.includes(P.READ)) {
-        return Promise.resolve(ok([{ DT: "Date(1691455258000-0400)", Value: "77", Trend: "Flat" }]));
+        return Promise.resolve(
+          ok([{ DT: "Date(1691455258000-0400)", Value: "77", Trend: "Flat" }]),
+        );
       }
       return Promise.resolve(new Response("{}", { status: 404 }));
     });
@@ -572,7 +614,11 @@ describe("Session & getters", () => {
 
   it("DEFAULT_UUID handling: accountId default & sessionId default", async () => {
     // Account ID default
-    setFetch((url) => (reqToString(url).includes(P.AUTH) ? Promise.resolve(ok("00000000-0000-0000-0000-000000000000")) : Promise.resolve(new Response("{}", { status: 404 }))));
+    setFetch((url) =>
+      reqToString(url).includes(P.AUTH)
+        ? Promise.resolve(ok("00000000-0000-0000-0000-000000000000"))
+        : Promise.resolve(new Response("{}", { status: 404 })),
+    );
     await assert.rejects(() => mkDex().getCurrentGlucoseReading(), /Account ID default/i);
 
     // Session ID default
@@ -603,9 +649,9 @@ describe("Session & getters", () => {
       if (s.includes(P.READ)) {
         return Promise.resolve(
           ok([
-            { DT: "Date(1691455258000-0400)", Value: 90, Trend: "None" },          // arrow ""
+            { DT: "Date(1691455258000-0400)", Value: 90, Trend: "None" }, // arrow ""
             { DT: "Date(1691455258000-0400)", Value: 91, Trend: "NotComputable" }, // arrow "?"
-            { DT: "Date(1691455258000-0400)", Value: 87, Trend: "FortyFiveUp" },   // for getters assertions
+            { DT: "Date(1691455258000-0400)", Value: 87, Trend: "FortyFiveUp" }, // for getters assertions
           ]),
         );
       }
