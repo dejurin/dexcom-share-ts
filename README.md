@@ -1,6 +1,7 @@
 # dexcom-share-ts
 
 [![CI](https://img.shields.io/github/actions/workflow/status/dejurin/dexcom-share-ts/ci.yaml?style=flat-square)](https://github.com/dejurin/dexcom-share-ts/actions)
+[![npm version](https://img.shields.io/npm/v/dexcom-share-ts.svg)](https://www.npmjs.com/package/dexcom-share-ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 A simple TypeScript API client for the **Dexcom Share** service with modern DX and runtime safety.
@@ -14,7 +15,7 @@ Based: [https://github.com/gagebenne/pydexcom](https://github.com/gagebenne/pyde
 - Strict **TS types**, ESLint (typed rules), Node 18+ built-in `fetch`
 - Tests: **node\:test** + **c8** (coverage), build via **tsup**
 
-> **Disclaimer**: This is an unofficial library. It is not a medical device and must not be used for medical decisions.
+> **Disclaimer**: This is an unofficial library of Dexcom™. It is not a medical device and must not be used for medical decisions.
 
 ![Dexcom Share TS demo](.github/dexcom-share-ts.gif)
 
@@ -378,6 +379,22 @@ try {
   }
 }
 ```
+
+---
+
+### Important Notice & Disclaimer
+
+Unofficial project. This library is not affiliated with, endorsed by, or authorized by Dexcom, Inc. Dexcom, Dexcom Share, and related marks are trademarks of Dexcom, Inc. Any use of the Dexcom service is subject to Dexcom’s terms and policies.
+
+Not medical advice / not a medical device. This software is provided for educational and informational purposes only. It is not intended for diagnosis, treatment, or any medical decision-making. Do not rely on this library for real-time monitoring or safety-critical scenarios. Always consult a qualified healthcare professional.
+
+No warranties; use at your own risk. The software is provided “AS IS”, without warranty of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, and non-infringement. To the maximum extent permitted by law, the authors and contributors shall not be liable for any claim, damages, or other liability arising from, out of, or in connection with the software or its use.
+
+Credentials & data privacy. You are solely responsible for protecting your account credentials and for handling any personal or health information (PHI/PII) in compliance with applicable laws and policies. Avoid hard-coding credentials; prefer environment variables and secure secret storage.
+
+API stability & rate limits. The Dexcom Share endpoints may change, throttle, or become unavailable at any time. This project provides no uptime guarantees. Use responsibly and respect all rate limits and terms of service.
+
+Compliance. By using this library, you agree to comply with all applicable laws and third-party terms (including Dexcom’s). If those terms prohibit your intended use, you must not use this library.
 
 ---
 
