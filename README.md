@@ -1,7 +1,5 @@
 # dexcom-share-ts
 
-[![npm](https://img.shields.io/npm/v/dexcom-share-ts?style=flat-square)](https://www.npmjs.com/package/dexcom-share-ts)
-[![Node](https://img.shields.io/node/v/dexcom-share-ts?style=flat-square)](https://nodejs.org/)
 [![CI](https://img.shields.io/github/actions/workflow/status/dejurin/dexcom-share-ts/ci.yaml?style=flat-square)](https://github.com/dejurin/dexcom-share-ts/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
