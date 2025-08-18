@@ -1,5 +1,7 @@
 # dexcom-share-ts
 
+![Dexcom Share TS demo](.github/dexcom-share-ts.gif)
+
 [![CI](https://img.shields.io/github/actions/workflow/status/dejurin/dexcom-share-ts/ci.yaml?style=flat-square)](https://github.com/dejurin/dexcom-share-ts/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 

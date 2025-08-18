@@ -1,7 +1,7 @@
 import { Dexcom, Region, MemorySessionCache } from "dexcom-share-ts";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "./.env", debug: true });
+dotenv.config({ path: "./.env", debug: false, override: true, quiet: true });
 
 const dex = new Dexcom({
   username: process.env.DEXCOM_USER,
@@ -18,5 +18,6 @@ if (bg) {
   console.log("mmol/L:", bg.mmolL);
   console.log("Trend Arrow:", bg.trendArrow);
   console.log("Trend Description:", bg.trendDescription);
+  console.log("Trend Direction:", bg.trendDirection);
   console.log("DateTime:", bg.datetime);
 }
